@@ -7,9 +7,9 @@ An MCP server that builds a searchable library of visual references from Pintere
 ## Requirements
 
 - Python 3.10+
-- [OpenRouter](https://openrouter.ai) API key (for LLM vision analysis)
+- API key for any **OpenAI-compatible vision API** (OpenRouter, OpenAI, Groq, Mistral, etc.)
 
-> **Cost note:** Image analysis calls the LLM via OpenRouter API and incurs a small cost per image. With the default model (`claude-sonnet-4-6`), analyzing 8 images costs roughly $0.01–$0.05 depending on image size.
+> **Cost note:** Image analysis calls an LLM API and incurs a small cost per image. With `claude-sonnet-4-6` via OpenRouter, analyzing 8 images costs roughly $0.01–$0.05. With `gpt-4o-mini` via OpenAI it's even cheaper.
 
 ## Installation
 
@@ -53,10 +53,26 @@ Or add to your MCP client config (Claude Desktop, Cursor, etc.):
 
 | Variable | Default | Description |
 |---|---|---|
-| `OPENROUTER_API_KEY` | — | **Required.** Your OpenRouter API key |
-| `PINTEREST_VISION_MODEL` | `anthropic/claude-sonnet-4-6` | LLM model for image analysis (any vision model on OpenRouter) |
+| `VISION_API_KEY` | — | **Required.** API key for your LLM provider |
+| `VISION_API_BASE_URL` | `https://openrouter.ai/api/v1` | Base URL of any OpenAI-compatible API |
+| `PINTEREST_VISION_MODEL` | `anthropic/claude-sonnet-4-6` | Any vision-capable model from your provider |
 | `PINTEREST_DATA_DIR` | `./data` | Directory for downloaded images |
 | `CHROMA_PERSIST_DIR` | `./data/chroma` | ChromaDB vector storage path |
+
+**Supported providers (any OpenAI-compatible API):**
+```
+# OpenRouter (access to 200+ models)
+VISION_API_BASE_URL=https://openrouter.ai/api/v1
+PINTEREST_VISION_MODEL=anthropic/claude-sonnet-4-6
+
+# OpenAI directly
+VISION_API_BASE_URL=https://api.openai.com/v1
+PINTEREST_VISION_MODEL=gpt-4o-mini
+
+# Groq
+VISION_API_BASE_URL=https://api.groq.com/openai/v1
+PINTEREST_VISION_MODEL=llama-3.2-11b-vision-preview
+```
 
 ## Available tools
 

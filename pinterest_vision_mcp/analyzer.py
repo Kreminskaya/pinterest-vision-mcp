@@ -8,7 +8,8 @@ import httpx
 
 from pinterest_vision_mcp.schemas import VisualAnalysis, VisualFashionTags
 
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+VISION_API_KEY = os.getenv("VISION_API_KEY", "")
+VISION_API_BASE_URL = os.getenv("VISION_API_BASE_URL", "https://openrouter.ai/api/v1")
 ANALYZE_MODEL = os.getenv("PINTEREST_VISION_MODEL", "anthropic/claude-sonnet-4-6")
 
 FASHION_ANALYSIS_PROMPT = (
@@ -43,9 +44,9 @@ def analyze_image(local_path: str, model: Optional[str] = None) -> VisualAnalysi
     used_model = model or ANALYZE_MODEL
     result = VisualAnalysis(local_path=local_path, analyzed_by=used_model)
 
-    if not OPENROUTER_API_KEY:
+    if not VISION_API_KEY:
         result.ok = False
-        result.error = "OPENROUTER_API_KEY not set"
+        result.error = "VISION_API_KEY not set"
         return result
 
     b64 = _image_to_base64(local_path)
@@ -77,9 +78,9 @@ def analyze_image(local_path: str, model: Optional[str] = None) -> VisualAnalysi
     try:
         with httpx.Client(timeout=60) as client:
             resp = client.post(
-                "https://openrouter.ai/api/v1/chat/completions",
+                f"{VISION_API_BASE_URL.rstrip('/')}/chat/completions",
                 headers={
-                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Authorization": f"Bearer {VISION_API_KEY}",
                     "Content-Type": "application/json",
                 },
                 json=payload,
