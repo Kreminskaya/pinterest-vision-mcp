@@ -8,7 +8,7 @@ from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 from pinterest_vision_mcp.schemas import VisualAnalysis, IngestResult
 
 CHROMA_PATH = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma")
-COLLECTION_NAME = "nasmotrennost"
+COLLECTION_NAME = "visual_references"
 
 
 def _get_collection():
@@ -22,13 +22,9 @@ def _get_collection():
 def ingest_analyses(
     analyses: list[VisualAnalysis],
     session_id: str = "",
-    project_id: str = "",
-    agent_name: str = "",
     query: str = "",
 ) -> IngestResult:
-    result = IngestResult(
-        session_id=session_id, project_id=project_id, agent_name=agent_name
-    )
+    result = IngestResult(session_id=session_id)
     successful = [a for a in analyses if a.ok and a.tags.raw_description]
     if not successful:
         return result
@@ -37,7 +33,7 @@ def ingest_analyses(
     ids, documents, metadatas = [], [], []
 
     for analysis in successful:
-        doc_id = f"nasmot_{str(uuid.uuid4())[:12]}"
+        doc_id = f"ref_{str(uuid.uuid4())[:12]}"
         tags = analysis.tags
         doc_text = (
             f"{tags.raw_description} Lighting: {tags.lighting_type}. "
@@ -49,8 +45,6 @@ def ingest_analyses(
             "local_path": analysis.local_path,
             "query": query,
             "session_id": session_id,
-            "project_id": project_id,
-            "agent_name": agent_name,
             "lighting_type": tags.lighting_type,
             "composition_type": tags.composition_type,
             "camera_distance": tags.camera_distance,
@@ -75,7 +69,7 @@ def ingest_analyses(
     return result
 
 
-def search_nasmotrennost(
+def search_visual_references(
     query: str,
     n_results: int = 10,
     filters: Optional[dict] = None,

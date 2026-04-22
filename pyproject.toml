@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pinterest-vision-mcp = "pinterest_vision_mcp.server:mcp.run"
+pinterest-vision-mcp = "pinterest_vision_mcp.server:main"
 
 [build-system]
 requires = ["hatchling"]

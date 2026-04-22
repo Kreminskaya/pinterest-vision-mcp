@@ -31,11 +31,8 @@ def _slug(text: str) -> str:
 def search_pinterest(
     query: str,
     limit: int = 20,
-    session_id: Optional[str] = None,
-    project_id: str = "",
-    shot_id: str = "",
 ) -> PinterestSearchResult:
-    sid = session_id or str(uuid.uuid4())[:8]
+    sid = str(uuid.uuid4())[:8]
     result = PinterestSearchResult(session_id=sid, query=query)
 
     if not PINTEREST_DL_OK:
@@ -72,7 +69,6 @@ def search_pinterest(
 
 def download_assets(
     search_result: PinterestSearchResult,
-    project_id: str = "",
     max_images: int = 10,
 ) -> DownloadResult:
     date_str = datetime.utcnow().strftime("%Y%m%d")
@@ -82,7 +78,6 @@ def download_assets(
 
     dr = DownloadResult(
         session_id=search_result.session_id,
-        project_id=project_id,
         save_dir=str(save_dir),
     )
 

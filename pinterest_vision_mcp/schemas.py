@@ -33,7 +33,6 @@ class DownloadedAsset(BaseModel):
 
 class DownloadResult(BaseModel):
     session_id: str = ""
-    project_id: str = ""
     downloaded: list[DownloadedAsset] = Field(default_factory=list)
     failed: list[DownloadedAsset] = Field(default_factory=list)
     save_dir: str = ""
@@ -65,18 +64,14 @@ class VisualAnalysis(BaseModel):
 
 class IngestResult(BaseModel):
     session_id: str = ""
-    project_id: str = ""
-    agent_name: str = ""
     ingested_count: int = 0
-    collection_name: str = "nasmotrennost"
+    collection_name: str = "visual_references"
     chroma_ids: list[str] = Field(default_factory=list)
 
 
 class PipelineResult(BaseModel):
     session_id: str = ""
     query: str = ""
-    project_id: str = ""
-    agent_name: str = ""
     search: Optional[PinterestSearchResult] = None
     download: Optional[DownloadResult] = None
     analyses: list[VisualAnalysis] = Field(default_factory=list)
