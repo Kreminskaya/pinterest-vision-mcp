@@ -1,0 +1,21 @@
+[project]
+name = "pinterest-vision-mcp"
+version = "0.1.0"
+description = "MCP server: Pinterest visual search + LLM analysis + vector storage"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp",
+    "pinterest-dl",
+    "httpx",
+    "chromadb",
+    "pydantic",
+    "python-dotenv",
+]
+
+[project.scripts]
+pinterest-vision-mcp = "pinterest_vision_mcp.server:mcp.run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

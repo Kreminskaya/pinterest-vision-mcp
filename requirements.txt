@@ -1,0 +1,6 @@
+fastmcp
+pinterest-dl
+httpx
+chromadb
+pydantic
+python-dotenv
